@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 from django import forms
 from django.db.models import Q
-from django.db.models.sql.constants import QUERY_TERMS
 from django.utils.translation import ugettext_lazy as _
 
 from django_filters.fields import RangeField, LookupTypeField
@@ -14,42 +13,9 @@ __all__ = [
     'RangeFilter', 'DateRangeFilter', 'AllValuesFilter',
 ]
 
-LOOKUP_TYPES = sorted(QUERY_TERMS.keys())
+from django_filters import filters
 
-class Filter(object):
-    creation_counter = 0
-    field_class = forms.Field
-
-    def __init__(self, name=None, label=None, widget=None, action=None,
-        lookup_type='exact', required=False, **kwargs):
-        self.name = name
-        self.label = label
-        if action:
-            self.filter = action
-        self.lookup_type = lookup_type
-        self.widget = widget
-        self.required = required
-        self.extra = kwargs
-
-        self.creation_counter = Filter.creation_counter
-        Filter.creation_counter += 1
-
-    @property
-    def field(self):
-        if not hasattr(self, '_field'):
-            if self.lookup_type is None or isinstance(self.lookup_type, (list, tuple)):
-                if self.lookup_type is None:
-                    lookup = [(x, x) for x in LOOKUP_TYPES]
-                else:
-                    lookup = [(x, x) for x in LOOKUP_TYPES if x in self.lookup_type]
-                self._field = LookupTypeField(self.field_class(
-                    required=self.required, widget=self.widget, **self.extra),
-                    lookup, required=self.required, label=self.label)
-            else:
-                self._field = self.field_class(required=self.required,
-                    label=self.label, widget=self.widget, **self.extra)
-        return self._field
-
+class Filter(filters.Filter):
     def filter(self, value):
         if isinstance(value, (list, tuple)):
             lookup = str(value[1])
