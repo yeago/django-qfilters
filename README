@@ -17,6 +17,9 @@ With this extension:
 
 SomeQs.filter(Q(x=y)&Q(y__in=z)&Q(a__range=[b]))
 
+Effectively, this project just subclasses the FilterSet and Filter
+objects from the original project in order to achieve the assumptions below.
+
 # ASSUMPTION 1
 
 Filter objects return Q objects which are then combined and filtered
