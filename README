@@ -1,0 +1,33 @@
+This is an extension to Gaynor's django-filters found at:
+
+https://github.com/alex/django-filter
+
+For my particular case I needed more specific ways to conduct filtering
+than the original project provided so some core assumptions were changed.
+
+The advantage is found while querying relations. The original project
+filters querysets in a chain (see below) but across relations this leads to some
+suprisingly and--i believe--unexpected results.
+ 
+Gaynor's version (effectively:)
+
+SomeQs.filter(x=y).filter(y__in=z).filter.filter(a__range=[b])
+
+With this extension:
+
+SomeQs.filter(Q(x=y)&Q(y__in=z)&Q(a__range=[b]))
+
+# ASSUMPTION 1
+
+Filter objects return Q objects which are then combined and filtered
+at one time rather than as a chain.
+
+# ASSUMPTION 2
+
+Filter objects don't receive the 'qs' argument. This is because filters
+are no longer applied in a chain.
+
+# ASSUMPTION 3
+
+A filter that doesn't have a value simply isn't called. The old version would
+just return the qs but its no longer shuttled from Filter to Filter.
