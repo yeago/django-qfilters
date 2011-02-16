@@ -8,6 +8,10 @@ than the original project provided so some core assumptions were changed.
 The advantage is found while querying relations. The original project
 filters querysets in a chain (see below) but across relations this leads to some
 suprisingly and--i believe--unexpected results.
+
+If you're interested in exactly what the problem is, see:
+
+https://github.com/subsume/filter-test/commit/e7c1943c3c4570786ca102dba88d5adf4dc4e1eb
  
 Gaynor's version (effectively:)
 
