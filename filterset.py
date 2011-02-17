@@ -126,16 +126,13 @@ class FilterSet(filterset_base.FilterSet):
 		}
 
 		data = filter_for_field.get(f.__class__)
-		filter_class = data.get('filter_class')
 		if f.choices:
 			default['choices'] = f.choices
-			if filter_class == CharFilter:
-				filter_class = ChoiceFilter
 			#return ChoiceFilter(**default)
 
 		if data is None:
 			return
-
+		filter_class = data.get('filter_class')
 		default.update(data.get('extra', lambda f: {})(f))
 		if filter_class is not None:
 			return filter_class(**default)
