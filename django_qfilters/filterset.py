@@ -87,7 +87,11 @@ FILTER_FOR_DBFIELD_DEFAULTS = {
         'filter_class': CharFilter,
     },
 }
-
+if hasattr(models, "XMLField"):
+	FILTER_FOR_DBFIELD_DEFAULTS[models.XMLField]= {
+		'filter_class': CharFilter,
+	}
+	
 class FilterSet(filterset_base.FilterSet):
 	@property
 	def qs(self):
